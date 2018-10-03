@@ -1,1 +1,1 @@
-web: node ../benchlms/server.js
+web: node server.js
