@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>LMS</title>
+</head>
+
+<body>
+   <!--END SCRIPTS FOR LAYOUT -->
+   <link rel="stylesheet" href="/plugins/css/bootstrap-3.3.7/dist/css/bootstrap.min.css">
+   <script src="/plugins/js/jquery.min.js"></script>
+   <script src="/plugins/css/bootstrap-3.3.7/dist/js/bootstrap.min.js"></script>
+   <link rel="stylesheet" type="text/css" href="plugins/css/layout.css">
+   <!--END SCRIPTS FOR LAYOUT -->
+
+   <link rel="stylesheet" type="text/css" href="plugins/font-awesome-4.7.0/css/font-awesome.min.css">
+   <link rel="stylesheet" type="text/css" href="plugins/css/mainlmsv2.css">
+   <script src="canvas-designer-widget.js"></script>
+
+   <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+
+         <div class="logo">
+          <a href="index.html"><img src="plugins/img/bench.png" alt="logo"></a>
+        </div>
+
+      
+    </div>
+</div>
+</nav>
+<div class="responsive">
+<div class="video-div ">
+    <h4 align="center">Videos</h4>
+    <div class="main-video"></div>
+    <hr>
+    <div class="other-videos"></div>
+</div>
+
+<div id="widget-container"></div>
+</div>
+<div style="width: 18%; height: 100%; position: absolute;left:0; ">
+
+
+
+
+
+
+    <div class="topleftnav">
+        <div style="padding: 5px 10px;">  </div>
+        <h4 align="center">Users</h4>
+        <hr>
+        <p style="margin: 0  margin-bottom: 10px;margin-left: 10px; ">Number of connected participants: <b id="number-of-connected-users">0</b></p>
+
+        <div id="hide-on-datachannel-opened">
+            <input type="text" id="room-id" placeholder="Room-Number" disabled>
+            &nbsp;<button id="open-room" disabled class="btn">Open</button>
+        </div>
+
+        
+    </div>
+    <div class="responsive">
+    <div id="conversation-panel1">
+
+        <div id="conversation-panel"></div>
+        <h4 align="center"  >Chat</h4>
+        <hr>
+        <textarea id="txt-chat-message" placeholder="&nbsp;&nbsp;Chat Here....."disabled></textarea>
+        <button id="btn-chat-message" class="btn"  title="Send Message"><i class="fa fa-send" title="Send"></i></button>
+
+
+        <button id="btn-attach-file" class="btn"  title="Attached a file"><i class="fa fa-file"></i></button>
+
+
+    </div>
+</div>
+</div>
+<script>
+
+    document.getElementById('open-room').onclick = function() {
+        var roomid = document.getElementById('room-id').value;
+        if (!roomid.length) return alert('Please enter roomid.');
+
+        this.disabled = true;
+
+        connection.open(roomid, onOpenRoom);
+
+        this.parentNode.innerHTML = '<a href="#' + roomid + '" target="_blank">Please share this link</a>';
+    };
+
+    var designer = new CanvasDesigner();
+    // you can place widget.html anywhere
+    designer.widgetHtmlURL = 'widget.html';
+    designer.widgetJsURL = 'widget.min.js'
+    designer.addSyncListener(function(data) {
+        connection.send(data);
+    });
+    designer.setSelected('pencil');
+    designer.setTools({
+        pencil: true,
+        text: true,
+        image: true,
+        pdf: true,
+        eraser: true,
+        line: true,
+        arrow: true,
+        dragSingle: true,
+        dragMultiple: true,
+        arc: true,
+        rectangle: true,
+        quadratic: false,
+        bezier: false,
+        marker: true,
+        zoom: false,
+        lineWidth: true,
+        colorsPicker: true,
+        extraOptions: false,
+        code: false,
+        undo:true
+        
+    });
+    designer.appendTo(document.getElementById('widget-container'));
+</script>
+
+<script src="/plugins/js/adapter.js"></script>
+<script src="/plugins/js/RTCMultiConnection.min.js"></script>
+<script src="/plugins/js/socket.io.js"></script>
+<script src="/plugins/js/FileBufferReader.js"></script>
+
+
+<script>
+
+    var connection = new RTCMultiConnection();
+    //connection.socketURL = 'http://10.10.41.23:1001/';
+    //connection.socketURL = 'http://10.10.95.30:1001/';
+    connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
+
+    connection.socketMessageEvent = 'canvas-designer';
+    connection.chunkSize = 15 * 1000;
+    connection.enableFileSharing = true;
+    connection.session = {
+        audio: true,
+        video: true,
+        data: true
+    };
+    connection.sdpConstraints.mandatory = {
+        OfferToReceiveAudio: true,
+        OfferToReceiveVideo: true
+    };
+    if (location.hash.replace('#', '').length) {
+        var roomid = location.hash.replace('#', '');
+        connection.join(roomid);
+    }
+    //THIS FUNCTION IS FOR FIXING THE ECHO (HOPEFULLY IT FIXED)
+    function afterEach(setTimeoutInteval, numberOfTimes, callback, startedTimes) {
+        startedTimes = (startedTimes || 0) + 1;
+        if (startedTimes >= numberOfTimes) return;
+
+        setTimeout(function() {
+            callback();
+            afterEach(setTimeoutInteval, numberOfTimes, callback, startedTimes);
+        }, setTimeoutInteval);
+    }
+
+    connection.onUserStatusChanged = function(event) {
+        var infoBar = document.getElementById('hide-on-datachannel-opened');
+        if (event.status == 'online') {
+            infoBar.innerHTML = event.userid + ' is <b>Online</b>.';
+        }
+        if (event.status == 'offline') {
+            infoBar.innerHTML = event.userid + ' is <b>Offline</b>.';
+        }
+        numberOfConnectedUsers.innerHTML = connection.getAllParticipants().length;
+    };
+    var numberOfConnectedUsers = document.getElementById('number-of-connected-users');
+    connection.onopen = function(event) {
+        var infoBar = document.getElementById('hide-on-datachannel-opened');
+        infoBar.innerHTML = '<b style="display:none;">' + event.userid + '<b style="display: none;"> is ready to collaborate with you.</b>';
+
+        if (designer.pointsLength <= 0) {
+            // make sure that remote user gets all drawings synced.
+            setTimeout(function() {
+                connection.send('plz-sync-points');
+            }, 1000);
+        }
+
+        numberOfConnectedUsers.innerHTML = connection.getAllParticipants().length;
+        document.getElementById('btn-chat-message').disabled = false;
+        document.getElementById('txt-chat-message').disabled = false;
+        document.getElementById('btn-attach-file').style.display = 'inline-block';
+    };
+    connection.onclose = connection.onerror = connection.onleave = function() {
+        numberOfConnectedUsers.innerHTML = connection.getAllParticipants().length;
+    };
+    connection.onmessage = function(event) {
+        if(event.data.chatMessage) {
+            appendChatMessage(event);
+            return;
+        }
+        if(event.data.checkmark === 'received') {
+            var checkmarkElement = document.getElementById(event.data.checkmark_id);
+            if(checkmarkElement) {
+                checkmarkElement.style.display = 'inline';
+            }
+            return;
+        }
+        if (event.data === 'plz-sync-points') {
+            designer.sync();
+            return;
+        }
+        designer.syncData(event.data);
+    };
+    //THIS BELOW CODE IS FOR UNDO FUNCTION. PARA MAG SYNC AGAD SA OTHER USERS PAG NAG UNDO!
+    function afterUndoOrAfterRedo() {
+        designer.sync();
+    };
+</script>
+
+<script src="/dev/webrtc-handler.js"></script>
+
+<script>
+   // function onOpenRoom() {
+        // capture canvas-2d stream
+        // and share in realtime using RTCPeerConnection.addStream
+        // requires: dev/webrtc-handler.js
+       /* designer.captureStream(function(stream) {
+            stream.isScreen = true;
+            stream.streamid = stream.id;
+            stream.type = 'local';*/
+            
+          /* var video = document.createElement('video');
+            video.muted = true;
+            video.srcObject = stream;
+            stream.streamid = stream.id;
+            video.play();
+            
+            connection.attachStreams.push(stream);
+            connection.onstream({
+                stream: stream,
+                type: 'local',
+                streamid: stream.id,
+                // mediaElement: video
+            });
+        };
+
+    connection.onstream = function(event) {
+        if(event.stream.isScreen) {
+            var video = document.getElementById('#main-video');
+            video.setAttribute('data-streamid', event.streamid);
+            video.style.display = 'block';
+            video.srcObject = event.stream;
+            video.play();
+        }
+        else {
+            event.mediaElement.controls = true;
+            var otherVideos = document.querySelector('#other-videos');
+            otherVideos.appendChild(event.mediaElement);
+        }
+    };*/
+    function onOpenRoom() {
+    // capture canvas-2d stream
+    // and share in realtime using RTCPeerConnection.addStream
+    // requires: dev/webrtc-handler.js
+    //for the preveiew feature of canvas
+    video.captureStream(function(stream) {
+        connection.attachStreams = [stream];
+        connection.onstream({
+            stream: stream
+        });
+    });
+}
+
+connection.dontCaptureUserMedia = false;
+var localVideosContainer = document.getElementById('main-video');
+var remoteVideosContainer = document.getElementById('other-videos');
+connection.onstream = function(event) {
+
+
+
+   if(event.type === 'local'){
+      $('.main-video').html('').append(event.mediaElement);
+      return;
+  }
+
+  $('.other-videos').append(event.mediaElement);
+
+
+};
+connection.onstreamended = function(event) {
+    var video = document.getElementById(event.streamid);
+    if (video && video.parentNode) {
+        video.parentNode.removeChild(event.mediaElement);
+    }
+};
+/*-----------------OLD ONSTREAMENEDED CODE */
+    /*connection.onstreamended = function(event) {
+        var video = document.querySelector('video[data-streamid="' + event.streamid + '"]');
+        if(!video) {
+            video = document.getElementById(event.streamid);
+            if(video) {
+                video.parentNode.removeChild(video);
+                return;
+            }
+        }
+        if(video) {
+            video.srcObject = null;
+            video.style.display = 'none';
+        }
+    };*/
+/*var username = prompt('Please enter your username');
+connection.extra.username = username;
+connection.updateExtraData();
+
+connection.onExtraDataUpdated = function(event) {
+    var userNameDIV = document.getElemetnById(event.userid);
+    if(!userNameDIV) {
+         userNameDIV = document.createElement('div');
+         userNameDIV.id = event.userid;
+         listOfUsersNames.appendChild(userNameDIV); // the HTML element where you are showing user names
+    }
+    userNameDIV.innerHTML = event.extra.username;
+
+var h2 = document.createElement('h2');
+h2.innerHTML = event.extra.username;
+div.appendChild(h2);
+
+otherVideos.appendChild(div);
+};*/
+var conversationPanel = document.getElementById('conversation-panel');
+function appendChatMessage(event, checkmark_id) {
+    var div = document.createElement('div');
+    div.className = 'message';
+    if(event.data) {
+            // you can use "event.extra.fullName"
+            div.innerHTML = '<b>' + event.userid + ':</b><br>' + event.data.chatMessage;
+            if(event.data.checkmark_id) {
+                connection.send({
+                    checkmark: 'received',
+                    checkmark_id: event.data.checkmark_id
+                });
+            }
+        }
+        else {
+            div.innerHTML = '<b>You:</b> <img class="checkmark" id="' + checkmark_id + '" title="Received" src="plugins/img/check-icon.png"><br>' + event;
+            div.style.background = '#00A2E8';
+        }
+        conversationPanel.appendChild(div);
+        conversationPanel.scrollTop = conversationPanel.clientHeight;
+        conversationPanel.scrollTop = conversationPanel.scrollHeight - conversationPanel.scrollTop;
+    }
+    document.getElementById('btn-chat-message').onclick = function() {
+        var chatMessage = document.getElementById('txt-chat-message').value;
+        document.getElementById('txt-chat-message').value = '';
+        if(!chatMessage || !chatMessage.replace(/ /g, '').length) return;
+        var checkmark_id = connection.userid + connection.token();
+        
+        appendChatMessage(chatMessage, checkmark_id);
+        connection.send({
+            chatMessage: chatMessage,
+            checkmark_id: checkmark_id
+        });
+    };
+    document.getElementById('txt-chat-message').onkeyup = function(e) {
+        var code = e.keyCode || e.which;
+        if (code == 13) {
+            document.getElementById('btn-chat-message').click(); // you can even call "onclick"
+        }
+    };
+    document.getElementById('btn-attach-file').onclick = function() {
+        var file = new FileSelector();
+        file.selectSingleFile(function(file) {
+            connection.send(file);
+        });
+    };
+    function getFileHTML(file) {
+        var attachment = '<a href="' + url + '" target="_blank" download="' + file.name + '">Download: <b>' + file.name + '</b></a>';
+        var url = file.url || URL.createObjectURL(file);
+        if (file.name.match(/\.jpg|\.png|\.jpeg|\.gif/gi)) {
+            attachment += '<br><img crossOrigin="anonymous" src="' + url + '">';
+        } else if (file.name.match(/\.wav|\.mp3/gi)) {
+            attachment += '<br><audio src="' + url + '" controls></audio>';
+        } else if (file.name.match(/\.pdf|\.js|\.txt|\.sh/gi)) {
+            attachment += '<iframe class="inline-iframe" src="' + url + '"></iframe></a>';
+        }
+        return attachment;
+    }
+    connection.onFileEnd = function (file) {
+        var html = getFileHTML(file);
+        var div = progressHelper[file.uuid].div;
+        if(file.userid === connection.userid) {
+            div.innerHTML = '<b style:color:>You:</b><br>' + html;
+            div.style.background = '';
+        }
+        else {
+            div.innerHTML = '<b>' + file.userid + ':</b><br>' + html;
+        }
+    };
+    // to make sure file-saver dialog is not invoked.
+    connection.autoSaveToDisk = false;
+    var progressHelper = {};
+    connection.onFileProgress = function (chunk, uuid) {
+        var helper = progressHelper[chunk.uuid];
+        helper.progress.value = chunk.currentPosition || chunk.maxChunks || helper.progress.max;
+        updateLabel(helper.progress, helper.label);
+    };
+    connection.onFileStart = function (file) {
+        var div = document.createElement('div');
+        div.className = 'message';
+        
+        if(file.userid === connection.userid) {
+            div.innerHTML = '<b>You:</b><br><label>0%</label> <progress></progress>';
+            div.style.background = '#00A2E8';
+        }
+        else {
+            div.innerHTML = '<b>' + file.userid + ':</b><br><label>0%</label> <progress></progress>';
+        }
+        div.title = file.name;
+        conversationPanel.appendChild(div);
+        progressHelper[file.uuid] = {
+            div: div,
+            progress: div.querySelector('progress'),
+            label: div.querySelector('label')
+        };
+        progressHelper[file.uuid].progress.max = file.maxChunks;
+        conversationPanel.scrollTop = conversationPanel.clientHeight;
+        conversationPanel.scrollTop = conversationPanel.scrollHeight - conversationPanel.scrollTop;
+    };
+    function updateLabel(progress, label) {
+        if (progress.position == -1) return;
+        var position = +progress.position.toFixed(2).split('.')[1] || 100;
+        label.innerHTML = position + '%';
+    }
+    document.getElementById('open-room').disabled = false;
+    document.getElementById('room-id').disabled = false;
+</script>
+
+</body>
+</html>

@@ -1,0 +1,133 @@
+ <style>
+ /* Remove the navbar's default margin-bottom and rounded borders */ 
+ html,
+ body {
+  background-color: #F1F3F7;
+  font-size: 13px;
+  cursor: default;
+  overflow-x: hidden; 
+}
+.navbar {
+  margin-bottom: 0;
+  border-radius: 0;
+  background-color: #00a2e8;
+  border-width: 0px;
+}
+
+/* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+.row.content {height: 880px}
+
+/* Set gray background color and 100% height */
+/* RIGHT SIDENAV */
+#rightsidenav {
+  background-color: #ffffff;
+  height: 73%;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #C6CFD6;
+  border-radius:20px;
+  
+  width: 100%;
+  margin-top:10px;
+  margin-bottom:10px;
+  margin-right:10px;
+  text-align: left;
+  z-index: -1;
+  position: absolute;
+}
+/* LEFT FIRST SIDENAV */
+.topleftnav {
+  background-color: #ffffff;
+  height: 33%;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #C6CFD6;
+  border-radius:20px;
+  margin-left:10px;
+  width: 19%;
+  text-align: left;
+  margin-top:6px;
+  margin-bottom:150px;
+  margin-right:10px;
+  position: fixed; 
+  
+}
+.video-div {
+  background-color: #ffffff;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #C6CFD6;
+  border-radius:20px;
+  margin-left:10px;
+  width: 19%;
+  height: 58%;
+  text-align: left;
+  margin-top:343px;
+  margin-right:10px;
+  position: fixed; 
+}
+.h4 {
+  text-decoration-style: bold;
+
+
+}
+/* LEFT SECOND SIDENAV */
+#secondleftnav {
+  background-color: #ffffff;
+  height: 61%;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #C6CFD6;
+  border-radius:20px;
+  margin-left:-355px;
+  width: 17.5%;
+  margin-top:330px;
+  margin-bottom:10px;
+  margin-right:10px;
+  text-align: left;
+}
+/* BODY */
+#whiteboard{
+  background-color: #ffffff;
+  height: 97%;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #C6CFD6;
+  border-radius:20px;
+  margin-left:1px;
+  width: 61%;
+  margin-top:10px;
+  margin-bottom:10px;
+  margin-right:10px;
+
+}
+.logo {
+  float: left;
+}
+
+.logo img {
+  width: 100px;
+  height: 50px;
+}
+
+/* Set black background color, white text and some padding */
+footer {
+  background-color: #323639;
+  color: white;
+
+  padding: 25.5px;
+  height: 100%;
+  
+  
+}
+
+
+/* On small screens, set height to 'auto' for sidenav and grid */
+@media screen and (max-width: 767px) {
+  .sidenav {
+    height: auto;
+    padding: 20px;
+  }
+  .row.content {height:auto;} 
+}
+</style>
