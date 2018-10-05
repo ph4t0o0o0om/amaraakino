@@ -2,7 +2,7 @@
 
 ## Demo: https://www.webrtc-experiment.com/Canvas-Designer/
 
-## Bench Demo: [demos/dashboard.html](https://bench-lms.herokuapp.com)
+## Bench Demo: [MY OWN DEMO](https://bench-lms.herokuapp.com)
 
 Multiple designers demo: https://www.webrtc-experiment.com/Canvas-Designer/multiple.html
 
