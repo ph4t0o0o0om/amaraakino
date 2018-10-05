@@ -2,7 +2,7 @@
 
 ## Demo: https://www.webrtc-experiment.com/Canvas-Designer/
 
-## Advance Demo: [demos/dashboard.html](https://rtcmulticonnection.herokuapp.com/demos/dashboard.html)
+## Bench Demo: [demos/dashboard.html](https://bench-lms.herokuapp.com)
 
 Multiple designers demo: https://www.webrtc-experiment.com/Canvas-Designer/multiple.html
 
@@ -655,6 +655,7 @@ For more info:
 
 1. [Muaz Khan](https://github.com/muaz-khan)
 2. [Oleg Aliullov](https://github.com/rashidovich2)
+3. [Phantom](https://github.com/ph4t0o0o0om)
 
 Please make pull-request to update this list.
 
