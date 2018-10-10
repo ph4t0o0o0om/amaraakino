@@ -9,8 +9,8 @@ var IceServersHandler = (function() {
                     'stun:webrtcweb.com:7788', // coTURN
                     'stun:webrtcweb.com:7788?transport=udp', // coTURN
                 ],
-                'username': 'tmjp',
-                'credential': 'tmjp'
+                'username': 'muazkh',
+                'credential': 'muazkh'
             },
             {
                 'urls': [
@@ -20,12 +20,14 @@ var IceServersHandler = (function() {
                     'turn:webrtcweb.com:8877?transport=udp', // coTURN udp
                     'turn:webrtcweb.com:8877?transport=tcp', // coTURN tcp
                 ],
-                'username': 'tmjp',
-                'credential': 'tmjp'
+                'username': 'muazkh',
+                'credential': 'muazkh'
             },
             {
                 'urls': [
                     'stun:stun.l.google.com:19302',
+                    'stun:stun1.l.google.com:19302',
+                    'stun:stun2.l.google.com:19302',
                     'stun:stun.l.google.com:19302?transport=udp',
                 ]
             }
