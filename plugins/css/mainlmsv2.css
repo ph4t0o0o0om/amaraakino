@@ -72,9 +72,7 @@ button, input {
     border: 1px solid red;
     outline:none;
 }
-button:hover, button:hover, input:focus {
-    border: 1px solid rgb(142, 142, 142);
-}
+
 button[disabled], input[disabled] {
 
     border: 1px solid rgb(218, 207, 207);
@@ -110,8 +108,8 @@ input {
     margin: 5px;
     border: 2px solid;
     border-color:  #C6CFD6;
-    padding: 1px;
-    border-radius: 3px;
+    padding: 2px;
+    border-radius: 10px;
     margin-left: 30px;
     margin-right:3px;
     margin-top: -20px;
@@ -137,10 +135,14 @@ input {
     border-color:  #C6CFD6;
     padding: 1px;
     border-radius: 3px;
-    margin-left: 5npx;
+    margin-left: 5px;
     margin-right:3px;
 }
- 
+.h4{
+    color: #00A2E8;
+    text-align: center;
+    font-style: italic;
+ }
 #txt-chat-message {
     width: 90%;
     resize: vertical;
@@ -157,11 +159,6 @@ input {
     border-radius:20px;
 
 }
-.h4{
-    color: #00A2E8;
-    text-align: center;
-    font-style: italic;
- }
 #btn-chat-message {
     margin: 5px;
 }
@@ -189,6 +186,9 @@ input {
     border-style: solid;
     border-radius: 20px;
     border-color: #ffffff;
+
+
+
 }
 
 #conversation-panel .message {
@@ -198,6 +198,8 @@ input {
     background: #00A2E8;
     color: #ffffff;
     width: 100%;
+
+    
 }
 #conversation-panel1{
    position: fixed;
@@ -227,6 +229,8 @@ input {
     z-index: 1;
     margin-top: 5px;
     padding: 2px;
+
+
 }
 #conversation-panel .message img, #conversation-panel .message video, #conversation-panel .message iframe {
     max-width: 50%;
@@ -266,9 +270,6 @@ button, input {
     font-size: 20px;
     border: 1px solid red;
     outline:none;
-}
-button:hover, button:hover, input:focus {
-    border: 1px solid rgb(142, 142, 142);
 }
 button[disabled], input[disabled] {
     background: rgb(249, 249, 249);

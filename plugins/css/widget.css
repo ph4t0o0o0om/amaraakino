@@ -65,13 +65,10 @@ body {
     font-size: 13px;
     height: 100%;
     cursor: default;
-    color: Gray;
     overflow: hidden;
     cursor: url(/plugins/img/pencilv3.cur), default;      
     display: block;
     width: 100%;
-   
-  
     }
 .tooltip {
     position: relative;
@@ -99,7 +96,6 @@ body {
     content: "";
     position: absolute;
     bottom: 100%;
-    
     left: 50%;
     margin-left: -5px;
     border-width: 6px;
@@ -201,7 +197,6 @@ a:hover {
     border-radius:20px;
     border-color: #ffffff;
 
-
 }
 
 .tool-box::-webkit-scrollbar {
@@ -300,11 +295,16 @@ input:focus {
 }
 /* arc */
 
-.arc-range-container, #pdf-page-container {
+#pdf-page-container {
     position: absolute;
     z-index: 1000;
     display: none;
 }
+.arc-range-container{
+    position: absolute;
+    z-index: -99999999999999999;
+    display: none;
+  }
 .arc-range {
     font-size: 18px;
     padding: 2px 16px;
@@ -357,12 +357,13 @@ input:focus {
 .context-popup {
     position: absolute;
     display: none;
-    margin-left: 1%;
-    border: 1px solid #E5E5E5;
+    margin-left: 1.5%;
+    border: 2px solid #E5E5E5;
     border-left: 0;
     background-color: #FBFBFB;
     box-shadow: inset 0 0 14px rgb(229, 229, 229);
     padding: 5px;
+    border-radius: 20px;
 }
 .line-width-text,
 .colors-container input {
@@ -375,6 +376,7 @@ input:focus {
 .colors-container label {
     width: 100px;
     display: inline-block;
+
 }
 .colors-container input {
     width: 100px;
@@ -402,7 +404,7 @@ input:focus {
     border-bottom-left-radius: 3px;
     padding: 5px 15px;
     text-decoration: none;
-    color: rgb(27, 26, 26);
+    color: #00A2E8;
     display: inline-block;
     border-radius: 10px;
     text-shadow: none;
@@ -414,8 +416,9 @@ input:focus {
 }
 .btn-007:hover,
 .btn-007:focus {
-    background: #00A2E8;
-    border: 3px solid #00A2E8;
+    background-color: #0091d0;
+    border: 3px solid #0091d0;
+    color: white;
 }
 .btn-007[disabled] {
     background: rgb(249, 249, 249);
