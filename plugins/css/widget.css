@@ -92,6 +92,7 @@ body {
     top: 110%;
     left: 118%;
     margin-left: -55px;
+    text-align: center;
 }
 
 .tooltip .tooltiptext::after {
@@ -101,7 +102,7 @@ body {
     
     left: 50%;
     margin-left: -5px;
-    border-width: 5px;
+    border-width: 6px;
     border-style: solid;
     border-color: transparent transparent #00A2E8 transparent;
 }
@@ -199,6 +200,7 @@ a:hover {
     padding: 5px 8px;
     border-radius:20px;
     border-color: #ffffff;
+
 
 }
 

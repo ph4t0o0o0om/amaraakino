@@ -61,10 +61,10 @@
     <!-- arc -->
 
     <section id="arc-range-container" class="arc-range-container">
-        <input id="arc-range" class="arc-range" type="text" value="2" style="color: white;">
-        <input type="checkbox" id="is-clockwise" checked="" class="allow-select">
-        <label for="is-clockwise">Clockwise?</label>
-        <div class="arc-range-container-guide">Use arrow keys ↑↓</div>
+        <input id="arc-range" class="arc-range" type="text" value="2">
+        <input type="checkbox" id="is-clockwise" checked="" class="allow-select" style="display:none;">
+        <label></label>
+        <div class="arc-range-container-guide"></div>
     </section>
 
     <!-- generated code -->
@@ -122,12 +122,12 @@
 
         <div class="input-div">
             <label for="marker-stroke-style">Thickness:</label>
-            <select id="marker-stroke-style" value="8">
+            <select id="marker-stroke-style" value="">
                 <option value='8'>8</option>
                 <option value='9'>9</option>
                 <option value='10'>10</option>
                 <option value='11'>11</option>
-                <option value='12'>12</option>
+                <option value='12' selected>12</option>
                 <option value='14'>14</option>
                 <option value='16'>16</option>
                 <option value='18'>18</option>
@@ -149,7 +149,7 @@
             <div id="marker-fill-colors" class='context-popup'>
                 <div class="top">
                     <div id="marker-selected-color-2"></div>
-                    <input id="marker-fill-style" type="text" value="FF7373">
+                    <input id="marker-fill-style" type="text" value="6699FF">
                 </div>
                 <table id="marker-colors-list">
 
