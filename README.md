@@ -2,8 +2,6 @@
 
 ## Demo: https://www.webrtc-experiment.com/Canvas-Designer/
 
-## Advance Demo: [demos/dashboard.html](https://rtcmulticonnection.herokuapp.com/demos/dashboard.html)
-
 Multiple designers demo: https://www.webrtc-experiment.com/Canvas-Designer/multiple.html
 
 ### YouTube video:
